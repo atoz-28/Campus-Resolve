@@ -1,14 +1,13 @@
+
 package com.campusresolve.app.ui.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -21,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onLogout: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -29,7 +30,6 @@ fun ProfileScreen() {
             .padding(20.dp),
         verticalArrangement = Arrangement.Top
     ) {
-
         Text(
             text = "Profile",
             style = MaterialTheme.typography.headlineSmall
@@ -37,7 +37,6 @@ fun ProfileScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Profile info
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp)
@@ -45,7 +44,6 @@ fun ProfileScreen() {
             Column(
                 modifier = Modifier.padding(20.dp)
             ) {
-
                 Text(
                     text = "Eldric Vincent",
                     style = MaterialTheme.typography.titleLarge
@@ -98,9 +96,7 @@ fun ProfileScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedButton(
-            onClick = {
-                // kulang pako ng logout functionalitu
-            },
+            onClick = onLogout,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Log Out")
@@ -120,11 +116,9 @@ fun ProfileOption(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
-
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium

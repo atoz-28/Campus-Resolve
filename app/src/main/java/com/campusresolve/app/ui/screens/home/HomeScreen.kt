@@ -16,14 +16,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.campusresolve.app.data.model.IssueViewModel
 
 @Composable
 fun HomeScreen(
+    viewModel: IssueViewModel,
     onReportIssue: () -> Unit,
     onMyReports: () -> Unit
 ) {
+    val reports by viewModel.issues.collectAsState()
 
     Column(
         modifier = Modifier
@@ -31,8 +36,6 @@ fun HomeScreen(
             .padding(20.dp),
         verticalArrangement = Arrangement.Top
     ) {
-
-        // Header
         Text(
             text = "Welcome to CampusResolve",
             style = MaterialTheme.typography.headlineSmall
@@ -47,7 +50,6 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Report Issue Card
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
@@ -55,11 +57,9 @@ fun HomeScreen(
                 containerColor = MaterialTheme.colorScheme.primaryContainer
             )
         ) {
-
             Column(
                 modifier = Modifier.padding(20.dp)
             ) {
-
                 Text(
                     text = "Have a campus concern?",
                     style = MaterialTheme.typography.titleMedium
@@ -73,9 +73,7 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    onClick = onReportIssue
-                ) {
+                Button(onClick = onReportIssue) {
                     Text("Report an Issue")
                 }
             }
@@ -83,7 +81,6 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Quick Actions
         Text(
             text = "Quick Actions",
             style = MaterialTheme.typography.titleLarge
@@ -95,7 +92,6 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
             OutlinedButton(
                 onClick = onMyReports,
                 modifier = Modifier.weight(1f)
@@ -104,9 +100,7 @@ fun HomeScreen(
             }
 
             OutlinedButton(
-                onClick = {
-                    // Help functionality will be added later
-                },
+                onClick = {},
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Help")
@@ -115,7 +109,6 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // Recent Reports
         Text(
             text = "Recent Reports",
             style = MaterialTheme.typography.titleLarge
@@ -123,19 +116,22 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        ReportCard(
-            title = "Broken Chair",
-            location = "Room 302",
-            status = "Pending"
-        )
+        if (reports.isEmpty()) {
+            Text(
+                text = "No reports yet.",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        } else {
+            reports.take(3).forEach { report ->
+                ReportCard(
+                    title = report.title,
+                    location = report.location,
+                    status = report.status
+                )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        ReportCard(
-            title = "Aircon Problem",
-            location = "Room 405",
-            status = "Resolved"
-        )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+        }
     }
 }
 
@@ -145,16 +141,13 @@ fun ReportCard(
     location: String,
     status: String
 ) {
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp)
     ) {
-
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium
@@ -163,7 +156,7 @@ fun ReportCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = location,
+                text = "Location: $location",
                 style = MaterialTheme.typography.bodyMedium
             )
 

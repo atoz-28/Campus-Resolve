@@ -1,8 +1,7 @@
 package com.campusresolve.app.data.model
 
 enum class IssueStatus {
-    REPORTED,
-    ACKNOWLEDGED,
+    PENDING,
     IN_PROGRESS,
     RESOLVED
 }
